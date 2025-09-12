@@ -1,49 +1,23 @@
-import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import './App.css'
 import Counter from './components/Counter'
+import Posts from './components/Posts'
 import Stats from './components/Stats'
-import initialCounters from './data/initialCounters'
+import { decrement, increment, reset } from './features/counters/countersSlice'
 
 function App() {
-  const [counters, setCounters] = useState(initialCounters);
-
+  const counters = useSelector((state) => state.counters)
+  const dispatch = useDispatch();
     const handlerIncrement = (counterId) => {
-        const updatedCounter = counters.map((c)=>{
-          if(c.id === counterId){
-            return{
-              ...c,
-              value: c.value +1
-            };
-          };
-          return c;
-        })
-        setCounters(updatedCounter);
+       dispatch(increment(counterId)) // Action Creator Function যেন আমরা কোন Data পাঠাতে পারি 
     };
 
     const handlerDecrement = (counterId) => {
-      const updatedCounter = counters.map((c)=>{
-          if(c.id === counterId){
-            return{
-              ...c,
-              value: c.value - 1
-            };
-          };
-          return c;
-        })
-        setCounters(updatedCounter)
+      dispatch(decrement(counterId))
     }
 
     const handlerReset = (counterId) => {
-      const updatedCounter =  counters.map((c)=>{
-          if(c.id === counterId){
-            return{
-              ...c,
-              value: c.value = 0
-            };
-          };
-          return c;
-        })
-        setCounters(updatedCounter)
+      dispatch(reset(counterId))
     }
 
     // derived state
@@ -60,6 +34,9 @@ function App() {
      <div>
       
       <Stats totalCount={totalCount}/>
+     </div>
+     <div>
+      <Posts/>
      </div>
      
     </div>
